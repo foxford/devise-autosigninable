@@ -13,12 +13,13 @@ module Devise #:nodoc:
       end
 
       # Return autosignin url for given resource
-      def auto_signin_url_for(resource)
+      def auto_signin_url_for(resource, options = {})
         resource_name = resource.class.to_s.downcase
-        send("#{resource_name}_autosignin_url",
-            { :"#{resource_name}_id" => resource.id,
-              :autosignin_token      => resource.autosignin_token }
-          )
+        options = {
+          :"#{resource_name}_id" => resource.id,
+          :autosignin_token      => resource.autosignin_token
+        }.reverse_merge(options)
+        send("#{resource_name}_autosignin_url", options)
       end
 
       # Sign in and tries to redirect first to given url and
