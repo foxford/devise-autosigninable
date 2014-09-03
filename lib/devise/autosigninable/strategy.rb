@@ -3,7 +3,6 @@ require 'devise/strategies/base'
 module Devise
   module Strategies
     class Autosigninable < Base
-
       def valid?
         valid_controller? && valid_params? && mapping.to.respond_to?('authenticate_with_autosignin_token')
       end
@@ -25,7 +24,6 @@ module Devise
       def valid_params?
         params[:autosignin_token].present?
       end
-
     end
   end
 end

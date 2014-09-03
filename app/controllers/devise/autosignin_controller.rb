@@ -1,6 +1,4 @@
 class Devise::AutosigninController < DeviseController
-
-  include Devise::Controllers::Helpers
   include Devise::Autosigninable::Helpers
 
   def create
@@ -10,7 +8,6 @@ class Devise::AutosigninController < DeviseController
     else
       set_now_flash_message :alert, (warden.message || :invalid)
     end
-    sign_in_and_redirect_to_url(resource, params[:return_to])    
+    sign_in_and_redirect_to_url(resource, params[:return_to])
   end
-
 end
