@@ -12,29 +12,24 @@ module Devise
       end
 
       module ClassMethods
-
         RETRY_COUNT = 20
 
         # Generate autosignin tokens unless already exists and save the records.
-        def ensure_all_autosignin_tokens(batch_size=500)
-          user_count = count(:conditions => { :autosignin_token => nil })
-          find_in_batches(:batch_size => batch_size,
-                          :conditions => {
-                            :autosignin_token => nil }) do |group|
-            group.each { |user| user.ensure_autosignin_token! }
+        def ensure_all_autosignin_tokens(batch_size = 500)
+          where(autosignin_token: nil).find_each(batch_size: batch_size) do |resource|
+            resource.ensure_autosignin_token!
           end
         end
 
         # Generate autosignin tokens and save the records.
-        def reset_all_autosignin_tokens(batch_size=500)
-          user_count = count
-          find_in_batches(:batch_size => batch_size) do |group|
-            group.each { |user| user.reset_autosignin_token! }
+        def reset_all_autosignin_tokens(batch_size = 500)
+          find_each(batch_size: batch_size) do |resource|
+            resource.reset_autosignin_token!
           end
         end
 
         # generation random autosignin token
-        def autosignin_token(uniq = false, field = 'autosignin_token')
+        def autosignin_token(uniq = true, field = 'autosignin_token')
           if uniq
             RETRY_COUNT.times do
               token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand}--")
@@ -64,7 +59,7 @@ module Devise
 
       # Generate new autosignin token
       def reset_autosignin_token
-        self.autosignin_token  = self.autosigninable? ? self.class.autosignin_token : nil
+        self.autosignin_token = self.autosigninable? ? self.class.autosignin_token : nil
       end
 
       # Generate new autosignin token and save the record.
@@ -102,7 +97,7 @@ module Devise
           end
         end
         reset_autosignin_token! if self.class.autosignin_expire
-        save(:validate => false) if changed?
+        save(validate: false) if changed?
         result
       end
     end

@@ -3,21 +3,19 @@ require 'devise/mapping'
 module Devise #:nodoc:
   module Autosigninable #:nodoc:
     module Helpers
-
       # Create the link to autosignin url based on resource with given
       # link_text.
       # Example: link_to_autosignin(user, user.email).
-      def link_to_autosignin(resource, link_text, options={})
-        link_to link_text, auto_signin_url_for(resource) , options
+      def link_to_autosignin(resource, link_text, options = {})
+        link_to link_text, auto_signin_url_for(resource), options
       end
 
       # Return autosignin url for given resource
       def auto_signin_url_for(resource)
         resource_name = resource.class.to_s.downcase
         send("#{resource_name}_autosignin_url",
-            { :"#{resource_name}_id" => resource.id,
-              :autosignin_token      => resource.autosignin_token }
-          )
+             { :"#{resource_name}_id" => resource.id,
+               :autosignin_token      => resource.autosignin_token })
       end
 
       # Sign in and tries to redirect first to given url and
@@ -25,7 +23,7 @@ module Devise #:nodoc:
       #
       # If resource is blank than tries redirect to given url
       # or root url.
-      def sign_in_and_redirect_to_url(resource = nil, url=nil)
+      def sign_in_and_redirect_to_url(resource = nil, url = nil)
         if resource
           sign_out(resource)
           sign_in(resource)

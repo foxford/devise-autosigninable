@@ -11,10 +11,10 @@ else
 end
 
 Devise.add_module :autosigninable,
-  :controller => :autosignin,
-  :model => 'devise/autosigninable/model',
-  :route => :autosignin,
-  :strategy => true
+                  controller: :autosignin,
+                  model: 'devise/autosigninable/model',
+                  route: :autosignin,
+                  strategy: true
 
 require 'devise/autosigninable/routes'
 require 'devise/autosigninable/helpers'
