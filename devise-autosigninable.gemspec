@@ -13,5 +13,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.version       = Devise::Autosigninable::VERSION
 
-  gem.add_dependency 'devise', '>= 2.1.0'
+  gem.add_dependency 'devise', '>= 4.0.0'
 end
