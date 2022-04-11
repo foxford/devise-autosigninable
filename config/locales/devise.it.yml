@@ -1,0 +1,4 @@
+it:
+  devise:
+    autosignin:
+      signed_in: "Autorizzato con successo"
