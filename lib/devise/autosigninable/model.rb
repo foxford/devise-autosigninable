@@ -5,14 +5,11 @@ module Devise
 
       included do
         before_create :reset_autosignin_token
-
-        # Indicator: expire autosignin token.
-        mattr_accessor :autosignin_expire
-        @@autosignin_expire = false
       end
 
       module ClassMethods
-        RETRY_COUNT = 20
+        Devise::Models.config(self, :autosignin_expire,
+                                    :autosignin_generation_retry_count)
 
         # Generate autosignin tokens unless already exists and save the records.
         def ensure_all_autosignin_tokens(batch_size = 500)
@@ -31,11 +28,11 @@ module Devise
         # generation random autosignin token
         def autosignin_token(uniq = true, field = 'autosignin_token')
           if uniq
-            RETRY_COUNT.times do
+            autosignin_generation_retry_count.times do
               token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand}--")
               return token unless exists? field => token
             end
-            raise Exception.new("Couldn't generate #{self.class}:#{field} for #{RETRY_COUNT} times")
+            raise Exception.new("Couldn't generate #{self.class}:#{field} for #{autosignin_generation_retry_count} times")
           else
             Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand}--")
           end
