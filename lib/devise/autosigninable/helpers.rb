@@ -21,7 +21,7 @@ module Devise #:nodoc:
       # Sign in and tries to redirect first to given url and
       # then to the url specified by after_sign_in_path_for.
       #
-      # If resource is blank than tries redirect to given url
+      # If resource is blank then tries redirect to given url
       # or root url.
       def sign_in_and_redirect_to_url(resource = nil, url = nil)
         if resource
